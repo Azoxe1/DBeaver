@@ -5,27 +5,31 @@ name VARCHAR (60) NOT null
 
 CREATE TABLE IF NOT EXISTS singer(
 id SERIAL PRIMARY KEY,
-id_genre INTEGER REFERENCES genre(id),
 name VARCHAR (60) NOT null
 );
 
 CREATE TABLE IF NOT EXISTS singer_genre(
-id_genre INTEGER REFERENCES genre(id),
+id_genre  INTEGER REFERENCES genre(id),
 id_singer INTEGER REFERENCES singer(id),
-constraint pkq primary key (id_genre, id_singer)
+constraint singer_genres primary key (id_genre, id_singer)
 );
 
 CREATE TABLE IF NOT EXISTS album(
 id SERIAL PRIMARY KEY,
-id_singer INTEGER REFERENCES singer(id),
 date_create_album date NOT null,
 name VARCHAR (60) NOT null
 );
 
-CREATE TABLE IF NOT EXISTS singers_album(
+CREATE TABLE IF NOT EXISTS album_singers(
 id_album INTEGER REFERENCES album(id),
 id_singer INTEGER REFERENCES singer(id),
-constraint pkt primary key (id_album, id_singer)
+constraint collab_album primary key (id_album, id_singer)
+);
+
+CREATE TABLE IF NOT EXISTS collection(
+id SERIAL PRIMARY KEY,
+name VARCHAR (60) NOT null,
+date_create_collection date NOT null
 );
 
 CREATE TABLE IF NOT EXISTS song(
@@ -36,16 +40,8 @@ date_create_song date not null,
 duration time
 );
 
-CREATE TABLE IF NOT EXISTS collection(
-id SERIAL PRIMARY KEY,
-id_song INTEGER  REFERENCES song(id),
-id_singer INTEGER  REFERENCES singer(id),
-name VARCHAR (60) NOT null,
-date_create_collection date NOT null
-);
-
-CREATE TABLE IF NOT EXISTS song_collection(
-id_song INTEGER REFERENCES song(id),
+CREATE TABLE IF NOT EXISTS collection_song (
 id_collection INTEGER REFERENCES collection(id),
-constraint pky primary key (id_song, id_collection)
+id_song INTEGER REFERENCES song(id),
+constraint songs_collection primary key (id_song, id_collection)
 );
